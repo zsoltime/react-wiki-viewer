@@ -1,0 +1,48 @@
+*
+  box-sizing: inherit
+
+html, body
+  height: 100%
+
+body
+  background-color: $background-color
+  box-sizing: border-box
+  color: $text-color
+  font-family: $font-family
+  font-weight: 400
+  line-height: $line-height
+  margin: 0
+
+a
+  color: $link-color
+  text-decoration: none
+
+  &:hover
+    color: $link-color-active
+
+h1
+  font-weight: 400
+  margin: 0 auto 1rem
+  text-align: center
+
+input,
+button
+  border: 1px solid rgba(black, .1)
+  color: $text-color
+  font-family: $font-family
+  font-size: 1rem
+  font-weight: 300
+  line-height: $line-height
+  padding: .5rem 1rem
+
+input[type="search"]
+  appearance: none
+
+.main
+  align-items: center
+  display: flex
+  justify-content: center
+  min-height: 70vh
+
+.about
+  text-align: center
