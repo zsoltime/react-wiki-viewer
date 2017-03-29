@@ -1,15 +1,41 @@
 .search-form
   background-color: $primary-color
+  border: 1px solid rgba(black, .1)
   display: flex
+  flex-wrap: wrap
   justify-content: center
   margin-bottom: 1rem
   padding: 1rem
 
-  input[type="search"]
-    flex: 1 0 12rem
+  &__field
+    border: 1px solid rgba(black, .1)
+    flex: 1 0 10rem
+    padding: .5rem
 
-  button
+  &__btn
     background-color: rgba(black, .3)
+    border: 1px solid rgba(black, .1)
     color: rgba(white, .8)
     cursor: pointer
     flex: 0 1 5rem
+    font-weight: 300
+    padding: .5rem
+    text-align: center
+    transition: background .3s ease-out, color .3s ease-out
+
+    &:hover
+      background-color: rgba(black, .2)
+      color: rgba(white, .9)
+
+    &:last-child
+      flex-basis: 100%
+      margin-top: .5rem
+
+@media (min-width: 600px)
+  .search-form
+    flex-wrap: nowrap
+
+    &__btn:last-child
+      flex-basis: initial
+      margin-left: .5rem
+      margin-top: 0
