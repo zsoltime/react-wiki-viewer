@@ -16,16 +16,16 @@ class Viewer extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchResults = this.fetchResults.bind(this);
   }
-  handleSubmit(query) {
+  handleSubmit(q) {
+    const query = q.trim();
+    
     if (!query) {
       this.setState({
         query: undefined,
         results: [],
       });
     } else {
-      this.setState({
-        query,
-      });
+      this.setState({ query });
       this.fetchResults(query);
     }
   }

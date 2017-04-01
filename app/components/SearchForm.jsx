@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 
-const SearchForm = (props) => {
+const SearchForm = ({ handleSubmit }) => {
   let search;
   function onSearch(e) {
     e.preventDefault();
-    props.handleSubmit(search.value);
+    handleSubmit(search.value);
   }
   // TODO: Add autocomplete
   return (
