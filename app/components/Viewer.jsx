@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import SearchForm from 'SearchForm';
 import ListResults from 'ListResults';
+import SearchForm from 'SearchForm';
 import Spinner from 'Spinner';
 import appendParams from '../utils/url';
 
@@ -11,14 +11,31 @@ class Viewer extends Component {
     this.state = {
       query: undefined,
       results: [],
+      suggestions: [],
       isLoading: false,
     };
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchResults = this.fetchResults.bind(this);
   }
+  handleAutosuggestClick(text) {
+    SearchForm.search = text + '555';
+  }
+  handleInputChange(q) {
+    const query = q.trim();
+    if (query.length < 2) {
+      this.setState({
+        query: undefined,
+        suggestions: [],
+      });
+    } else {
+      this.setState({ query });
+      this.fetchAutocompleteResults(query);
+    }
+  }
   handleSubmit(q) {
     const query = q.trim();
-    
+
     if (!query) {
       this.setState({
         query: undefined,
@@ -73,55 +90,64 @@ class Viewer extends Component {
     };
     const url = appendParams('https://en.wikipedia.org/w/api.php', options);
 
-    fetch(url)
-    .then(res => res.json())
-    .then(({ query }) => {
-      const sortedPages = query.pages.sort((a, b) => a.index > b.index);
+    return fetch(url)
+      .then(res => res.json())
+      .then(({ query }) => {
+        const sortedPages = query.pages.sort((a, b) => a.index > b.index);
 
-      const pages = sortedPages.map(page => ({
-        index: page.index,
-        id: page.pageid,
-        title: page.title,
-        url: page.fullurl,
-        extract: page.extract,
-        thumbnail: page.thumbnail ? page.thumbnail.source : 'images/wiki.svg',
-        pageviews: page.pageviews ?
-          Object.keys(page.pageviews).reduce((views, key) => (
-            views + page.pageviews[key]
-          ), 0).toLocaleString() :
-          'Unknown',
-        lastupdate: page.touched,
-        links: page.links,
+        const pages = sortedPages.map(page => ({
+          index: page.index,
+          id: page.pageid,
+          title: page.title,
+          url: page.fullurl,
+          extract: page.extract,
+          thumbnail: page.thumbnail ? page.thumbnail.source : 'images/wiki.svg',
+          pageviews: page.pageviews ?
+            Object.keys(page.pageviews).reduce((views, key) => (
+              views + page.pageviews[key]
+            ), 0).toLocaleString() :
+            'Unknown',
+          lastupdate: page.touched,
+          links: page.links,
+        }));
+
+        return {
+          pages,
+          search: query.search,
+        };
+      })
+      .then(results => this.setState({
+        results: results.pages,
+        isLoading: false,
       }));
-
-      return {
-        pages,
-        search: query.search,
-      };
-    })
-    .then(results => this.setState({
-      results: results.pages,
-      isLoading: false,
-    }));
   }
-  fetchAutocompleteResults(query) {
+  fetchAutocompleteResults(q) {
     this.setState({ isLoading: true });
 
-    fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&limit=10&format=json&origin=*&search=${query}`)
-    .then(res => res.json())
-    .then(res => (
-      res[1].reduce((acc, curr, i) => ([
-        ...acc,
-        {
-          title: curr,
-          text: res[2][i],
-          link: res[3][i],
-        }]), [])
-    ))
-    .then(results => this.setState({
-      results,
-      isLoading: false,
-    }));
+    const options = {
+      action: 'opensearch',
+      limit: 5,
+      format: 'json',
+      origin: '*',
+      search: q,
+    };
+    const url = appendParams('https://en.wikipedia.org/w/api.php', options);
+
+    return fetch(url)
+      .then(res => res.json())
+      .then(res => (
+        res[1].reduce((acc, curr, i) => ([
+          ...acc,
+          {
+            title: curr,
+            text: res[2][i],
+            link: res[3][i],
+          }]), [])
+      ))
+      .then(suggestions => this.setState({
+        suggestions,
+        isLoading: false,
+      }));
   }
   render() {
     const renderResults = () => {
@@ -135,7 +161,12 @@ class Viewer extends Component {
     };
     return (
       <div className="content">
-        <SearchForm handleSubmit={this.handleSubmit} />
+        <SearchForm
+          handleInputChange={this.handleInputChange}
+          handleSubmit={this.handleSubmit}
+          list={this.state.suggestions}
+          onClickEvent={this.handleAutosuggestClick}
+        />
         <div className="main">
           {renderResults()}
         </div>
