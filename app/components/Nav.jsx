@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, IndexLink } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 const Nav = () => (
   <nav className="top-bar">
@@ -8,25 +8,26 @@ const Nav = () => (
     </div>
     <ul className="menu">
       <li className="menu__item">
-        <IndexLink
+        <NavLink
           className="menu__link"
           activeClassName="menu__link--active"
+          exact
           to="/"
-        >Home</IndexLink>
+        >Home</NavLink>
       </li>
       <li className="menu__item">
-        <Link
+        <NavLink
           className="menu__link"
           activeClassName="menu__link--active"
           to="/about"
-        >About</Link>
+        >About</NavLink>
       </li>
       <li className="menu__item">
-        <Link
+        <NavLink
           className="menu__link"
           activeClassName="menu__link--active"
           to="/settings"
-        >Settings</Link>
+        >Settings</NavLink>
       </li>
     </ul>
   </nav>

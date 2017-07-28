@@ -18,9 +18,9 @@ class Viewer extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fetchResults = this.fetchResults.bind(this);
   }
-  handleAutosuggestClick(text) {
-    SearchForm.search = text + '555';
-  }
+  // handleAutosuggestClick(text) {
+  //   SearchForm.search = text + '555';
+  // }
   handleInputChange(q) {
     const query = q.trim();
     if (query.length < 2) {
