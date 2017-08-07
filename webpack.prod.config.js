@@ -58,6 +58,13 @@ module.exports = {
           loader: 'sass-loader',
         }],
       }),
+    }, {
+      test: /\.(gif|jpe?g|png|svg)$/i,
+      loader: 'url-loader',
+      options: {
+        limit: 100,
+        name: 'images/[name].[ext]',
+      },
     }],
   },
   plugins: [

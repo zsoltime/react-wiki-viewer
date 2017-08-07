@@ -60,6 +60,13 @@ module.exports = {
           sourceMap: true,
         },
       }],
+    }, {
+      test: /\.(gif|jpe?g|png|svg)$/i,
+      loader: 'url-loader',
+      options: {
+        limit: 25000,
+        name: 'images/[name].[ext]',
+      },
     }],
   },
   plugins: [
