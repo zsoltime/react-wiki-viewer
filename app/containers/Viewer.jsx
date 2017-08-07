@@ -5,6 +5,8 @@ import SearchForm from 'SearchForm';
 import Spinner from 'Spinner';
 import appendParams from '../utils/url';
 
+import placeholder from '../images/wiki.svg';
+
 class Viewer extends Component {
   constructor() {
     super();
@@ -101,7 +103,7 @@ class Viewer extends Component {
           title: page.title,
           url: page.fullurl,
           extract: page.extract,
-          thumbnail: page.thumbnail ? page.thumbnail.source : 'images/wiki.svg',
+          thumbnail: page.thumbnail ? page.thumbnail.source : placeholder,
           pageviews: page.pageviews ?
             Object.keys(page.pageviews).reduce((views, key) => (
               views + page.pageviews[key]
